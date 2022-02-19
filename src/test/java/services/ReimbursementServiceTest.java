@@ -1,34 +1,24 @@
 package services;
 
 import daos.ReimbursementDao;
-
-import junit.framework.TestCase;
+import daos.UserDao;
 import models.Reimbursement;
-import models.ReimbursementStatus;
-import models.ReimbursementType;
 import models.User;
+import models.UserRole;
+import org.junit.*;
+import org.mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
-import java.sql.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
-public class ReimbursementServiceTest extends TestCase {
 
+public class ReimbursementServiceTest {
 
-    @Before
-    void initMock() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Mock
     static ReimbursementDao rd;
@@ -36,31 +26,51 @@ public class ReimbursementServiceTest extends TestCase {
     @InjectMocks
     private static ReimbursementService rs;
 
+    @Mock
+    static UserDao ud;
 
+    @InjectMocks
+    private static UserService us;
 
+    @Before
+    public void initMock() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
     public void testCreateReimbursementReturnsReimbursement() {
 
-        Reimbursement test = rs.createReimbursement(new User(), ReimbursementType.FOOD,55.55, new Date(System.currentTimeMillis()), "Steve", new Date(System.currentTimeMillis()), "Golden Carrots", ReimbursementStatus.APPROVED);
-
-        assertNotNull(test);
+        when(rd.createReimbursement(any())).thenReturn(true);
+        User testUser = new User("username", "password", "first", "last", "email", UserRole.EMPLOYEE);
+        boolean test = rs.createReimbursement(testUser, "food", 55.55, "this is a test");
+        Mockito.verify(rd).createReimbursement(any());
+        assertTrue(test);
     }
 
     @Test
     public void testGetReimbursementByEmployee() {
-        List<Reimbursement> test = rs.getAllReimbursement();
+        User testUser = new User("username", "password", "first", "last", "email", UserRole.EMPLOYEE);
+        testUser.setUserID(1);
+        List<Reimbursement> test = rs.getReimbursementByEmployee(testUser);
         assertNotNull(test);
     }
 
     @Test
     public void testGetReimbursementByType() {
+        List<Reimbursement> test = rs.getReimbursementByType(any());
+        assertNotNull(test);
     }
 
     @Test
     public void testGetReimbursementByStatus() {
+        List<Reimbursement> test = rs.getReimbursementByStatus(any());
+        assertNotNull(test);
     }
 
     @Test
     public void testGetAllReimbursement() {
+        List<Reimbursement> test = rs.getAllReimbursement();
+        assertNotNull(test);
     }
 
     @Test
@@ -69,9 +79,34 @@ public class ReimbursementServiceTest extends TestCase {
 
     @Test
     public void testDeleteReimbursement() {
+
     }
 
-    private class DataMigrationService
-    {
+    @Test
+    public void testGetPendingForEmployee() {
+        User testUser = new User("username", "password", "first", "last", "email", UserRole.EMPLOYEE);
+        testUser.setUserID(1);
+        List<Reimbursement> test = rs.getPendingForEmployee(testUser);
+        assertNotNull(test);
+    }
+
+    @Test
+    public void testGetResolvedForEmployee() {
+        User testUser = new User("username", "password", "first", "last", "email", UserRole.EMPLOYEE);
+        testUser.setUserID(1);
+        List<Reimbursement> test = rs.getResolvedForEmployee(testUser);
+        assertNotNull(test);
+    }
+
+    @Test
+    public void testGetAllPendingReimbursement() {
+        List<Reimbursement> test = rs.getAllPendingReimbursement();
+        assertNotNull(test);
+    }
+
+    @Test
+    public void testGetAllResolvedReimbursement() {
+        List<Reimbursement> test = rs.getAllResolvedReimbursement();
+        assertNotNull(test);
     }
 }

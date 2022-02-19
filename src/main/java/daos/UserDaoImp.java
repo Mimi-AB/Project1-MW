@@ -14,22 +14,22 @@ public class UserDaoImp implements UserDao
     @Override
     public boolean createUser(User u)
     {
-            String sql = "INSERT INTO users (first, last, username, password, email, type) values (?, ?, ?, ?, ?, ?)";
-            try(Connection c = ConnectionUtil.getConnection();
-                PreparedStatement ps = c.prepareStatement(sql);)
-            {
-                ps.setString(1,u.getFirst());
-                ps.setString(2, u.getLast());
-                ps.setString(3, u.getUsername());
-                ps.setString(4, u.getPassword());
-                ps.setString(5, u.getEmail());
-                ps.setInt(6, u.getRole().ordinal());
-                ps.executeUpdate();
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
+        String sql = "INSERT INTO users (first, last, username, password, email, type) values (?, ?, ?, ?, ?, ?)";
+        try(Connection c = ConnectionUtil.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql);)
+        {
+            ps.setString(1,u.getFirst());
+            ps.setString(2, u.getLast());
+            ps.setString(3, u.getUsername());
+            ps.setString(4, u.getPassword());
+            ps.setString(5, u.getEmail());
+            ps.setInt(6, u.getRole().ordinal());
+            ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -49,7 +49,7 @@ public class UserDaoImp implements UserDao
                 int id = rs.getInt("id");
                 u.setUserID(id);
 
-                int roleOrdinal = rs.getInt("type");
+                int roleOrdinal = rs.getInt("type") - 1;
                 UserRole[] role = UserRole.values();
                 u.setRole(role[roleOrdinal]);
 
@@ -81,7 +81,7 @@ public class UserDaoImp implements UserDao
             {
                 User u = new User();
                 u.setUserID(id);
-                int roleOrdinal = rs.getInt("type");
+                int roleOrdinal = rs.getInt("type") - 1;
                 UserRole[] role = UserRole.values();
                 u.setRole(role[roleOrdinal]);
 
@@ -105,12 +105,12 @@ public class UserDaoImp implements UserDao
         try (Connection c = ConnectionUtil.getConnection();
              PreparedStatement ps = c.prepareStatement(sql);) {
             ps.setString(1,email);
-            ResultSet rs = ps.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 User u = new User();
                 u.setUserID(rs.getInt("id"));
-                int roleOrdinal = rs.getInt("type");
+                int roleOrdinal = rs.getInt("type") - 1;
                 UserRole[] role = UserRole.values();
                 u.setRole(role[roleOrdinal]);
 
@@ -141,7 +141,7 @@ public class UserDaoImp implements UserDao
             ps.setString(4, u.getPassword());
             ps.setString(5, u.getEmail());
             ps.setInt(6, u.getRole().ordinal());
-            int rowsAffected = ps.executeUpdate(sql);
+            int rowsAffected = ps.executeUpdate();
 
             if(rowsAffected==1){
                 return true;

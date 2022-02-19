@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="services.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-11T19:53:56" hostname="MacBooks-MBP.lan" time="10.388">
+<testsuite name="services.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-02-15T21:30:02" hostname="MacBooks-MBP.lan" time="0.96">
   <properties/>
-  <testcase name="deleteUserShouldDeleteUser" classname="services.UserServiceTest" time="10.388"/>
+  <testcase name="getUserById" classname="services.UserServiceTest" time="0.96"/>
   <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[org.postgresql.util.PSQLException: The connection attempt failed.
-	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:313)
+  <system-err><![CDATA[org.postgresql.util.PSQLException: The server requested password-based authentication, but no password was provided.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:643)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:163)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:215)
 	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:51)
 	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:225)
 	at org.postgresql.Driver.makeConnection(Driver.java:466)
@@ -12,9 +14,9 @@
 	at java.sql.DriverManager.getConnection(DriverManager.java:664)
 	at java.sql.DriverManager.getConnection(DriverManager.java:247)
 	at utils.ConnectionUtil.getConnection(ConnectionUtil.java:20)
-	at daos.UserDaoImp.deleteUser(UserDaoImp.java:160)
-	at services.UserService.deleteUser(UserService.java:49)
-	at services.UserServiceTest.deleteUserShouldDeleteUser(UserServiceTest.java:73)
+	at daos.UserDaoImp.readUserById(UserDaoImp.java:75)
+	at services.UserService.getUserById(UserService.java:48)
+	at services.UserServiceTest.getUserById(UserServiceTest.java:61)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -66,17 +68,5 @@
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
 	at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)
 	at java.lang.Thread.run(Thread.java:748)
-Caused by: java.net.SocketTimeoutException: connect timed out
-	at java.net.PlainSocketImpl.socketConnect(Native Method)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:476)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:218)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:200)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:394)
-	at java.net.Socket.connect(Socket.java:606)
-	at org.postgresql.core.PGStream.createSocket(PGStream.java:238)
-	at org.postgresql.core.PGStream.<init>(PGStream.java:98)
-	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:100)
-	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:215)
-	... 61 more
 ]]></system-err>
 </testsuite>

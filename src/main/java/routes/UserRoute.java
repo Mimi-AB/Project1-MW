@@ -24,4 +24,3 @@ public class UserRoute extends Route
     }
 
 }
-

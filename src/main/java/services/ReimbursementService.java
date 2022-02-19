@@ -8,13 +8,18 @@ import models.ReimbursementType;
 import models.User;
 import utils.LoggingSingleton;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.Date;
 import java.util.Locale;
 
 public class ReimbursementService {
 
+    SimpleDateFormat dateFormat =  new SimpleDateFormat("MM/dd/yyyy");
+    long currentDate = System.currentTimeMillis();
+
     private ReimbursementDao rd;
+
 
     public ReimbursementService() {
     }
@@ -29,9 +34,9 @@ public class ReimbursementService {
         ReimbursementType t = ReimbursementType.valueOf(type.trim().toUpperCase(Locale.ROOT));
         Reimbursement r = new Reimbursement(u, t, amount, description);
 
-        LoggingSingleton.logger.info("New reimbursement created: " + r.toString());
 
         if(rd.createReimbursement(r)) {
+            LoggingSingleton.logger.info("New reimbursement created: " + r.toString());
             return true;
         }
         else
@@ -88,4 +93,35 @@ public class ReimbursementService {
         rd.deleteReimbursement(r);
     }
 
+    //Method to return a list of reimbursements by the user ID.
+    public List<Reimbursement> getPendingForEmployee(User u) {
+        return rd.readAllPendingEmployee(u.getUserID());
+    }
+
+    //Method to return a list of reimbursements by the user ID.
+    public List<Reimbursement> getResolvedForEmployee(User u) {
+        return rd.readAllResolvedEmployee(u.getUserID());
+    }
+
+    //Method to return a list of all reimbursements.
+    public List<Reimbursement> getAllPendingReimbursement() {
+        return rd.readAllPendingReimbursement();
+    }
+
+    //Method to return a list of all reimbursements.
+    public List<Reimbursement> getAllResolvedReimbursement() {
+        return rd.readAllResolvedReimbursement();
+    }
+
+    public void approve(Reimbursement r) {
+        r.setResolved(dateFormat.format(currentDate));
+        LoggingSingleton.logger.info("Reimbursement" + r.getReimbursementID() + " Approved");
+        rd.sendApprove(r);
+    }
+
+    public void deny(Reimbursement r) {
+        r.setResolved(dateFormat.format(currentDate));
+        LoggingSingleton.logger.info("Reimbursement" + r.getReimbursementID() + " Denied");
+        rd.sendDeny(r);
+    }
 }

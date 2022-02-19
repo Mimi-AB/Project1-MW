@@ -28,24 +28,26 @@ public class AuthController {
 
         User u = us.getUserByEmail(lo.email);
 
-        context.req.getSession().setAttribute("id", "" + u.getUserID());
-        context.req.getSession().setAttribute("loggedIn", u.getEmail());
-        context.req.getSession().setAttribute("role", "" + u.getRole());
+        context.req.getSession().setAttribute("user-id", "" + u.getUserID());
+        context.req.getSession().setAttribute("logged-in", u.getEmail());
+        context.req.getSession().setAttribute("role", "" + u.getRole().ordinal());
 
-        context.header("pid", "" + u.getUserID());
-        context.header("loggedIn", u.getEmail());
-        context.header("role", "" + u.getRole());
+        context.header("user-id", "" + u.getUserID());
+        context.header("logged-in", u.getEmail());
+        context.header("role", "" + u.getRole().ordinal());
+
+        context.result("You Are Signed In!");
     };
 
     public Handler verify = context -> {
         context.header("Access-Control-Expose-Headers", "*");
 
-        if(context.req.getSession().getAttribute("id") == null) {
+        if(context.req.getSession().getAttribute("user_id") == null) {
             context.status(400);
             context.result("User not logged in");
         }
         else {
-            context.header("pid", "" + context.req.getSession().getAttribute("id"));
+            context.header("pid", "" + context.req.getSession().getAttribute("user_id"));
             context.result("User verified");
         }
     };

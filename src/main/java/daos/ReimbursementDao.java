@@ -15,4 +15,10 @@ public interface ReimbursementDao {
     public List<Reimbursement> readAllReimbursement();
     public void updateReimbursement(Reimbursement r);
     public void deleteReimbursement(Reimbursement r);
+    public List<Reimbursement> readAllPendingEmployee(int id);
+    public List<Reimbursement> readAllResolvedEmployee(int id);
+    public List<Reimbursement> readAllPendingReimbursement();
+    public List<Reimbursement> readAllResolvedReimbursement();
+    public void sendApprove(Reimbursement r);
+    public void sendDeny(Reimbursement r);
 }
